@@ -1,0 +1,113 @@
+@use "sass:color";
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap");
+
+$primary-color: #007bff;
+$text-color: #333;
+$background-color: #fff;
+$transition-speed: 0.3s;
+
+.header {
+  background: $background-color;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  padding: 16px 0;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+
+  .container {
+    max-width: 1200px;
+    margin: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+  }
+
+  .logo {
+    font-size: 1.8rem;
+    font-weight: 600;
+    text-decoration: none;
+    color: $text-color;
+    font-family: "Poppins", sans-serif;
+  }
+
+  .nav {
+    ul {
+      list-style: none;
+      display: flex;
+      gap: 25px;
+
+      li a {
+        text-decoration: none;
+        font-size: 1rem;
+        font-weight: 500;
+        color: $text-color;
+        transition: color $transition-speed;
+
+        &:hover {
+          color: $primary-color;
+        }
+      }
+    }
+  }
+
+  .cta-btn {
+    background: $primary-color;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background $transition-speed;
+
+    &:hover {
+      color: color.adjust($text-color, $lightness: -10%);
+    }
+  }
+
+  .menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: $text-color;
+  }
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .header {
+    .nav {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: 100%;
+      background: $background-color;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+      display: none;
+      flex-direction: column;
+      text-align: center;
+      padding: 20px 0;
+
+      &.open {
+        display: flex;
+      }
+
+      ul {
+        flex-direction: column;
+        gap: 15px;
+      }
+    }
+
+    .menu-toggle {
+      display: block;
+    }
+
+    .cta-btn {
+      display: block;
+    }
+  }
+}
