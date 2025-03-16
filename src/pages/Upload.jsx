@@ -36,9 +36,14 @@ const Upload = () => {
     setTranscription("");
 
     try {
-      const response = await axios.post("http://localhost:5000/api/transcribe", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      const response = await axios.post(
+          `${import.meta.env.VITE_API_BASE_URL}/transcribe`, 
+          formData, 
+          {
+              headers: { "Content-Type": "multipart/form-data" },
+          }
+      );
+  
 
       console.log("📩 Transcription Response:", response.data); // ✅ Debugging log
 
