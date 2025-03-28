@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { FaUser, FaEnvelope, FaLock } from "react-icons/fa";
-import { api } from "../utils/api"; // Import the Axios instance
-import { useNavigate } from "react-router-dom"; 
+import { FaUser, FaEnvelope, FaLock, FaEye, FaEyeSlash } from "react-icons/fa";
+import { api } from "../utils/api"; 
+import { useNavigate } from "react-router-dom";
+import { ClipLoader } from "react-spinners"; 
 import "./Registration.scss";
 
 const Registration = () => {
@@ -15,7 +16,8 @@ const Registration = () => {
 
   const [errors, setErrors] = useState({});
   const [serverError, setServerError] = useState("");
-  const [success, setSuccess] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false); // Password visibility toggle
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -24,7 +26,7 @@ const Registration = () => {
   const validateForm = () => {
     let newErrors = {};
     if (!formData.name.trim()) newErrors.name = "Name is required";
-    if (!formData.email.includes("@")) newErrors.email = "Enter a valid email";
+    if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = "Enter a valid email";
     if (formData.password.length < 6) newErrors.password = "Password must be at least 6 characters";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -33,17 +35,18 @@ const Registration = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setServerError("");
-    setSuccess("");
 
     if (validateForm()) {
+      setLoading(true);
+
       try {
-        const response = await api.post("/auth/signup", formData);
-        console.log("Response received:", response.data);
-        setSuccess("Registration successful! Redirecting...");
-        setTimeout(() => navigate("/login"), 2000);
+        await api.post("/auth/signup", formData);
+        navigate("/login");
       } catch (err) {
-        console.error("API Error:", err.response);
-        setServerError(err.response?.data?.message || "Registration failed");
+        console.error("Signup Error:", err.response);
+        setServerError(err.response?.data?.message || "Registration failed. Please try again.");
+      } finally {
+        setLoading(false);
       }
     }
   };
@@ -55,7 +58,6 @@ const Registration = () => {
         <p>Create an account to start summarizing audio easily!</p>
 
         {serverError && <p className="error">{serverError}</p>}
-        {success && <p className="success">{success}</p>}
 
         <form onSubmit={handleSubmit}>
           <div className="input-group">
@@ -72,11 +74,16 @@ const Registration = () => {
 
           <div className="input-group">
             <FaLock className="icon" />
-            <input type="password" name="password" placeholder="Password" value={formData.password} onChange={handleChange} />
+            <input type={showPassword ? "text" : "password"} name="password" placeholder="Password" value={formData.password} onChange={handleChange} />
+            <button type="button" className="toggle-password" onClick={() => setShowPassword(!showPassword)}>
+              {showPassword ? <FaEyeSlash /> : <FaEye />}
+            </button>
           </div>
           {errors.password && <p className="error">{errors.password}</p>}
 
-          <button type="submit" className="register-btn">Register</button>
+          <button type="submit" className="register-btn" disabled={loading}>
+            {loading ? <ClipLoader color="#fff" size={20} /> : "Register"}
+          </button>
         </form>
 
         <p className="login-link">

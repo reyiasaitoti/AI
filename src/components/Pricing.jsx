@@ -42,7 +42,7 @@ const pricingPlans = [
 
 const Pricing = () => {
   return (
-    <section className="pricing">
+    <section className="pricing" id="pricing">
       <h2>Choose Your Plan</h2>
       <p className="subtitle">Affordable pricing for individuals and businesses.</p>
       <div className="pricing-container">

@@ -1,19 +1,17 @@
 import React, { useState } from "react";
-import { FaEnvelope, FaLock } from "react-icons/fa";
-import { api } from "../utils/api"; // Import Axios instance
+import { FaEnvelope, FaLock, FaEye, FaEyeSlash } from "react-icons/fa";
+import { api } from "../utils/api"; 
 import { useNavigate } from "react-router-dom";
+import { ClipLoader } from "react-spinners"; // Import spinner
 import "./Login.scss";
 
 const Login = () => {
   const navigate = useNavigate();
-  
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
 
+  const [formData, setFormData] = useState({ email: "", password: "" });
   const [serverError, setServerError] = useState("");
-  const [success, setSuccess] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false); // Toggle password visibility
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -22,18 +20,25 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setServerError("");
-    setSuccess("");
+    setLoading(true);
 
     try {
-      const response = await api.post("/auth/login", formData);
-      console.log("Login Response:", response.data);
+      console.log("Submitting login request with:", formData);
 
-      localStorage.setItem("token", response.data.token); // Store token
-      setSuccess("Login successful! Redirecting...");
-      setTimeout(() => navigate("/dashboard"), 2000);
+      const response = await api.post("/auth/login", formData);
+
+      console.log("Login successful, response:", response.data);
+
+      localStorage.setItem("token", response.data.token);
+
+      setTimeout(() => {
+        setLoading(false);
+        navigate("/dashboard");
+      }, 1500); // Simulating a short delay before redirect
     } catch (err) {
-      console.error("API Error:", err.response);
-      setServerError(err.response?.data?.message || "Login failed");
+      console.error("Login Error:", err.response?.data || err.message);
+      setServerError(err.response?.data?.message || "Login failed. Please try again.");
+      setLoading(false);
     }
   };
 
@@ -44,20 +49,42 @@ const Login = () => {
         <p>Welcome back! Log in to access your dashboard.</p>
 
         {serverError && <p className="error">{serverError}</p>}
-        {success && <p className="success">{success}</p>}
 
         <form onSubmit={handleSubmit}>
           <div className="input-group">
             <FaEnvelope className="icon" />
-            <input type="email" name="email" placeholder="Email Address" value={formData.email} onChange={handleChange} />
+            <input
+              type="email"
+              name="email"
+              placeholder="Email Address"
+              value={formData.email}
+              onChange={handleChange}
+              required
+            />
           </div>
 
           <div className="input-group">
             <FaLock className="icon" />
-            <input type="password" name="password" placeholder="Password" value={formData.password} onChange={handleChange} />
+            <input
+              type={showPassword ? "text" : "password"}
+              name="password"
+              placeholder="Password"
+              value={formData.password}
+              onChange={handleChange}
+              required
+            />
+            <button
+              type="button"
+              className="toggle-password"
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? <FaEyeSlash /> : <FaEye />}
+            </button>
           </div>
 
-          <button type="submit" className="login-btn">Login</button>
+          <button type="submit" className="login-btn" disabled={loading}>
+            {loading ? <ClipLoader color="#fff" size={20} /> : "Login"}
+          </button>
         </form>
 
         <p className="register-link">

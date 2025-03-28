@@ -14,10 +14,10 @@ const Header = () => {
         {/* Navigation Menu */}
         <nav className={`nav ${menuOpen ? "open" : ""}`}>
           <ul>
-            <li><Link to="/" onClick={() => setMenuOpen(false)}>Home</Link></li>
-            <li><Link to="/" onClick={() => setMenuOpen(false)}>About</Link></li>
-            <li><Link to="/" onClick={() => setMenuOpen(false)}>Pricing</Link></li>
-            <li><Link to="/" onClick={() => setMenuOpen(false)}>Contact</Link></li>
+            <li><a href="/" onClick={() => setMenuOpen(false)}>Home</a></li>
+            <li><a href="#about" onClick={() => setMenuOpen(false)}>About</a></li>
+            <li><a href="#pricing" onClick={() => setMenuOpen(false)}>Pricing</a></li>
+            <li><a href="#contact" onClick={() => setMenuOpen(false)}>Contact</a></li>
           </ul>
         </nav>
 

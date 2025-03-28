@@ -8,6 +8,7 @@ import Pricing from "../components/Pricing";
 import Footer from "../components/Footer";
 import HowItWorks from "../components/HowItWorks";
 
+
 const Home = () => {
   return (
     <div className="home">

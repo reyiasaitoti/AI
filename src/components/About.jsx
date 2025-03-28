@@ -6,7 +6,7 @@ import aboutImage from "/src/assets/about-image.jpeg";
 
 const AboutUs = () => {
   return (
-    <section className="about-us">
+    <section className="about-us" id="about">
       <div className="container">
         <div className="text-content">
           <h2>About AudioSummarizer</h2>
