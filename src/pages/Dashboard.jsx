@@ -1,62 +1,46 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { FaFileAudio, FaClipboardList, FaUser, FaSignOutAlt } from "react-icons/fa";
+import { FaFileAudio, FaClipboardList, FaUser, FaSignOutAlt, FaChartLine, FaHistory } from "react-icons/fa";
 import "./Dashboard.scss";
 
 const Dashboard = () => {
   const navigate = useNavigate();
 
-  const handleNavigate = () => {
-    navigate("/summary"); // Redirect to the summary page
-  };
-
   const handleLogout = () => {
-    localStorage.removeItem("token"); // Remove stored token
-    window.location.href = "/login";  // Redirect to login page
-};
-
+    localStorage.removeItem("token");
+    window.location.href = "/login";
+  };
 
   return (
     <div className="dashboard">
-      {/* Sidebar */}
-      <aside className="sidebar">
-        <h2>AudioSummarizer</h2>
-        <ul>
-          <li>
-          <button className="summary-btn" onClick={handleNavigate}>
-      <FaClipboardList className="icon" />
-      <span>Summary History</span>
-    </button> 
-          </li>
-          <li>
-          <button className="upload-btn" onClick={() => navigate("/upload")}>
-            <FaFileAudio className="icon" />
-            Upload Audio
+      {/* Top Navigation Bar */}
+      <nav className="top-nav">
+        <h2 className="logo">AudioSummarizer</h2>
+        <div className="nav-links">
+          <button onClick={() => navigate("/summary")} className="nav-btn">
+            <FaClipboardList className="icon" /> Summary History
           </button>
-          </li>
-          <li>
-          <button className="profile-btn" onClick={() => navigate("/profile")}>
-            <FaUser className="icon" />
-            <span>Profile</span>
+          <button onClick={() => navigate("/upload")} className="nav-btn">
+            <FaFileAudio className="icon" /> Upload Audio
           </button>
-          </li>
-          <li className="logout" onClick={handleLogout} style={{ cursor: "pointer" }}>
-    <FaSignOutAlt className="icon" />
-    <span>Logout</span>
-</li>
+          <button onClick={() => navigate("/profile")} className="nav-btn">
+            <FaUser className="icon" /> Profile
+          </button>
+          <button onClick={handleLogout} className="logout-btn">
+            <FaSignOutAlt className="icon" /> Logout
+          </button>
+        </div>
+      </nav>
 
-        </ul>
-      </aside>
-
-      {/* Main Content */}
-      <main className="content">
+      {/* Main Dashboard Content */}
+      <main className="dashboard-content">
         <header>
-          <h1>Dashboard</h1>
-          <p>Welcome back! View your summaries and manage your files.</p>
+          <h1>Welcome..</h1>
+          <p>Track your progress, manage your files, and explore insights.</p>
         </header>
 
-        {/* Dashboard Stats */}
-        <section className="stats">
+        {/* Stats Section */}
+        <section className="stats-grid">
           <div className="stat-card">
             <FaFileAudio className="stat-icon" />
             <h3>50+</h3>
@@ -74,6 +58,28 @@ const Dashboard = () => {
             <h3>120+</h3>
             <p>Active Users</p>
           </div>
+
+          <div className="stat-card">
+            <FaChartLine className="stat-icon" />
+            <h3>85%</h3>
+            <p>Efficiency Rate</p>
+          </div>
+        </section>
+
+        {/* Recent Activity */}
+        <section className="recent-activity">
+          <h2>Recent Activity</h2>
+          <ul>
+            <li><FaHistory className="activity-icon" /> Transcribed "Lecture_Notes.mp3" - 5 min ago</li>
+            <li><FaHistory className="activity-icon" /> Uploaded "Podcast1.mp3" - 30 min ago</li>
+            <li><FaHistory className="activity-icon" /> Summarized "Meeting_Recap.mp3" - 1 hour ago</li>
+          </ul>
+        </section>
+
+        {/* Graph Section (Future Expansion) */}
+        <section className="analytics">
+          <h2>Performance Overview</h2>
+          <p>Coming soon: Detailed analytics and insights.</p>
         </section>
       </main>
     </div>
